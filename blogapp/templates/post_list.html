@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} All Post {% endblock %} 
+{% block css %}
+<link rel="stylesheet" href="{% static './css/style.css' %}"> 
+{% endblock %}
+
+{% block body %}
+
+<h2 class="blog-list-title">Blog List</h2>
+<hr>
+
+{% for blog in blogs %}
+<div class="blog">
+    <h3><a href="{{ blog.get_absolute_url }}">{{blog.title}}</a></h3>
+    <p>Created by - {{blog.author}} on {{blog.publish}}</p> 
+    <hr>
+    <p>{{blog.body|linebreaks|truncatewords:20}}</p>
+   
+</div>
+{% endfor %}
+
+{% endblock %}

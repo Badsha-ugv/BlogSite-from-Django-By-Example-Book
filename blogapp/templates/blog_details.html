@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{blog.title }} {% endblock %}
+{% block css %}
+<!-- link css file here  -->
+ <link rel="stylesheet" href="{% static './css/style.css' %}">
+{% endblock %}
+
+{% block body %}
+
+<div class="blog-details">
+    <h3>{{blog.title}}</h3>
+
+    <p>{{blog.body|linebreaks}}</p>
+</div>
+
+{% endblock %}
