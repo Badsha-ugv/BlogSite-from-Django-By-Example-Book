@@ -7,8 +7,19 @@ from .models import Post
 # Create your views here.
 
 def blog_list(request):
-    blogs = Post.objects.all()
-    return render(request, 'post_list.html',context={'blogs':blogs}) 
+    obj = Post.objects.all()
+    paginator = Paginator(obj,2)
+    page = request.GET.get('page')
+
+    try:
+        blogs = paginator.page(page)
+    except PageNotAnInteger:
+        blogs = paginator.page(1)
+    except EmptyPage:
+        blogs = paginator.page(paginator.num_pages)
+    
+
+    return render(request, 'post_list.html',context={'blogs':blogs,'page':page}) 
 
 def blog_details(request,slug=None):
     if slug != None:
