@@ -3,10 +3,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.mail import send_mail 
 
 
-from django.views.generic import ListView 
-
-from .forms import EmailPostForm
-from .models import Post 
+# import from models 
+from .forms import EmailPostForm, CommentForm
+from .models import Post, Comment
 
 
 # Create your views here.
@@ -26,21 +25,27 @@ def blog_list(request):
 
     return render(request, 'post_list.html',context={'blogs':blogs,'page':page}) 
 
-# # class view - ListView
-# class BlogListView(ListView):
-#     queryset = Post.objects.all()
-#     context_object_name = 'blogs'
-#     paginate_by = 2
-#     template_name = 'post_list.html'
-
-
-
 
 def blog_details(request,slug=None):
-    if slug != None:
-        blog = get_object_or_404(Post,slug=slug)
+    
+    blog = get_object_or_404(Post,slug=slug)
+    comment = blog.comments.filter(active=True)
 
-        return render(request, 'blog_details.html',context={'blog':blog})
+    if request.method == 'POST':
+        form = CommentForm(data=request.POST)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.post = blog 
+            new_comment.save()
+       
+    elif request.method == 'GET':
+        form = CommentForm()
+        context = {
+            'blog':blog,
+            'form':form,
+            'comments':comment
+        }
+        return render(request, 'blog_details.html',context)
 
 
 def share_post(request,post_id):

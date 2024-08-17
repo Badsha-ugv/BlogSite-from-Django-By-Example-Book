@@ -32,3 +32,8 @@
     max-width: 50%;
     margin: 40px auto;
 }
+
+.comment{
+    border: 1px solid #c7ed85;
+    padding: 20px;
+}
