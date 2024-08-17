@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Share {{post.title}} {% endblock %}
+
+{% block body %}
+
+<h3>Share Post Via Email</h3>
+
+
+    {% if sent %}
+    <p>
+        The Post Share Successfully!
+    </p>
+    {% else %}
+    <h3>Share - {{post.title}} by email </h3>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Send">
+    </form>
+    {% endif %}
+
+
+    
+
+
+
+{% endblock %}

@@ -13,6 +13,14 @@
     <h3>{{blog.title}}</h3>
 
     <p>{{blog.body|linebreaks}}</p>
+<br><br><br>
+    <p>
+        <a href="{% url 'share_post' blog.id %}">
+          Share this post
+        </a>
+       </p>
 </div>
+
+
 
 {% endblock %}
