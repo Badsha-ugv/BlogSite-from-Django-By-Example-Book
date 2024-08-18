@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.mail import send_mail 
+from taggit.models import Tag
+
 
 
 # import from models 
@@ -10,8 +12,14 @@ from .models import Post, Comment
 
 # Create your views here.
 
-def blog_list(request):
+def blog_list(request,tag_slug=None):
     obj = Post.objects.all()
+    tag = None 
+
+    if tag_slug:
+        tag = get_object_or_404(Tag,slug=tag_slug)
+        obj = obj.filter(tags__in=[tag])
+
     paginator = Paginator(obj,2)
     page = request.GET.get('page')
 
@@ -23,7 +31,7 @@ def blog_list(request):
         blogs = paginator.page(paginator.num_pages)
     
 
-    return render(request, 'post_list.html',context={'blogs':blogs,'page':page}) 
+    return render(request, 'post_list.html',context={'blogs':blogs,'page':page,'tag':tag}) 
 
 
 def blog_details(request,slug=None):

@@ -1,23 +1,33 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %} All Post {% endblock %} 
+{% extends 'base.html' %} 
+{% load static %} 
+{% block title %} All Post {%endblock %} 
 {% block css %}
-<link rel="stylesheet" href="{% static './css/style.css' %}"> 
-{% endblock %}
+<link rel="stylesheet" href="{% static './css/style.css' %}" />
+{% endblock %} 
 
 {% block body %}
 
 <h2 class="blog-list-title">Blog List</h2>
-<hr>
+<hr />
+
+{% if tag %}
+<h3>Post tag with : {{tag.name}}</h3>
+{% endif %}
 
 {% for blog in blogs %}
 <div class="blog">
+
     <h3><a href="{{ blog.get_absolute_url }}">{{blog.title}}</a></h3>
-    <p>Created by - {{blog.author}} on {{blog.publish}}</p> 
-    <hr>
+    <p>Created by - {{blog.author}} on {{blog.publish}}</p>
+
+
+    {% for tag in blog.tags.all %}
+        <a href="{% url 'blog_list_by_tag' tag.slug %}">{{ blog.tags.all|join:", " }}</a>
+        {% if not forloop.last %}, {% endif %}
+    {% endfor %}
+
+    <hr />
     <p>{{blog.body|linebreaks|truncatewords:20}}</p>
-   
 </div>
 {% endfor %}
 
