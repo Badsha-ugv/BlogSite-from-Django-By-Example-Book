@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.mail import send_mail 
 from taggit.models import Tag
+from django.db.models import Count 
+
 
 
 
@@ -37,6 +39,15 @@ def blog_list(request,tag_slug=None):
 def blog_details(request,slug=None):
     
     blog = get_object_or_404(Post,slug=slug)
+
+    post_tags_ids = blog.tags.values_list('id', flat=True)
+    # print(post_tags_ids)
+    similar_posts = Post.objects.filter(tags__in=post_tags_ids)\
+                              .exclude(id=blog.id)
+    # print(similar_posts)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags'))\
+                            .order_by('-same_tags','-publish')[:4]
+
     comment = blog.comments.filter(active=True)
 
     if request.method == 'POST':
@@ -51,7 +62,8 @@ def blog_details(request,slug=None):
         context = {
             'blog':blog,
             'form':form,
-            'comments':comment
+            'comments':comment,
+            'similar_posts':similar_posts
         }
         return render(request, 'blog_details.html',context)
 

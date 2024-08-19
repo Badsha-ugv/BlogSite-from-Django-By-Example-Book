@@ -45,10 +45,19 @@
 
     <hr>
 <br>
-
+<h3>Similar Post</h3>
+{% for post in similar_posts %}
+        <h4><a href="{{ post.get_absolute_url }}">{{post.title}}</a></h4>
+{% empty %}
+<h3>No Similar Post</h3>
+{% endfor %}
 {% if new_comment %}
         <p>comment created</p>
 {% else %}
+
+<br>
+<br>
+<br>
 <h3>Add New Comment</h3>
 <form action="" method="post">
     {% csrf_token %}
