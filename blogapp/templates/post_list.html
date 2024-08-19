@@ -25,7 +25,7 @@
 
 
     {% for tag in blog.tags.all %}
-        <a href="{% url 'blog_list_by_tag' tag.slug %}">{{ blog.tags.all|join:", " }}</a>
+        <a href="{% url 'blog_list_by_tag' tag.slug %}">{{ tag }}</a>
         {% if not forloop.last %}, {% endif %}
     {% endfor %}
 
