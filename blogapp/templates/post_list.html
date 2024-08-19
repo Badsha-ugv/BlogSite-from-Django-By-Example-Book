@@ -1,5 +1,7 @@
 {% extends 'base.html' %} 
 {% load static %} 
+{% load custom_tags %}
+
 {% block title %} All Post {%endblock %} 
 {% block css %}
 <link rel="stylesheet" href="{% static './css/style.css' %}" />
@@ -8,6 +10,7 @@
 {% block body %}
 
 <h2 class="blog-list-title">Blog List</h2>
+<p>Total : {% total_post %} blogs.</p>
 <hr />
 
 {% if tag %}
